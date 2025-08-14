@@ -275,5 +275,27 @@
     a.addEventListener('click', ()=> menu.classList.remove('show'));
   });
 </script>
+
+  <!-- Ticker berjalan -->
+<div class="ticker">
+  <marquee behavior="scroll" direction="left" scrollamount="5">
+    O T A K U &nbsp; C L U B &nbsp; C R E A T O R
+  </marquee>
+</div>
+
+<style>
+.ticker {
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 8px 0;
+  font-size: 18px;
+  font-weight: bold;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+</style>
 </body>
 </html>
