@@ -1,148 +1,310 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Otaku Club Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_1280.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-        text-align: center;
-    }
+  :root{
+    --accent:#00eaff;
+    --accent2:#ff3df0;
+    --glass:#0b0f16cc;
+    --border:#ffffff24;
+    --text:#eef6ff;
+    --muted:#a9b4c7;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:Poppins,system-ui,Arial; color:var(--text);
+    background:#05070c;
+  }
 
-    /* Navbar */
-    nav {
-        position: sticky;
-        top: 0;
-        background: rgba(0, 0, 0, 0.6);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        z-index: 1000;
-    }
-    nav .logo {
-        font-size: 20px;
-        font-weight: bold;
-        color: cyan;
-        text-shadow: 0 0 10px cyan;
-    }
-    nav ul {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-    }
-    nav ul li {
-        margin: 0 15px;
-    }
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
+  /* ===== Background galaxy + bintang kedip (ringan) ===== */
+  .bg{position:fixed; inset:0; z-index:-3;
+    background:url("https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=2000&auto=format&fit=crop") center/cover no-repeat;
+    filter:saturate(1.1) brightness(.85);
+  }
+  .bg::after{content:""; position:absolute; inset:0; z-index:-2;
+    background:radial-gradient(60% 60% at 50% 35%, #0000, #000 70%);
+  }
 
-    /* Hamburger */
-    .menu-toggle {
-        display: none;
-        flex-direction: column;
-        cursor: pointer;
-    }
-    .menu-toggle div {
-        width: 25px;
-        height: 3px;
-        background: white;
-        margin: 4px 0;
-    }
+  /* Bintang-bintang kecil (20 elemen saja) */
+  .stars{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden}
+  .star{position:absolute; width:2px; height:2px; background:#fff; border-radius:50%;
+        opacity:.1; animation:twinkle 3s infinite ease-in-out;}
+  @keyframes twinkle { 0%,100%{opacity:.15; transform:scale(1)} 50%{opacity:.9; transform:scale(1.6)} }
 
-    /* Hero */
-    .hero {
-        padding: 100px 20px;
-    }
-    .hero h1 {
-        font-size: 50px;
-        text-shadow: 0 0 20px cyan, 0 0 40px cyan;
-        animation: glow 2s infinite alternate;
-    }
-    @keyframes glow {
-        from { text-shadow: 0 0 20px cyan, 0 0 40px cyan; }
-        to { text-shadow: 0 0 30px lime, 0 0 60px lime; }
-    }
-    .hero p {
-        max-width: 600px;
-        margin: 20px auto;
-        font-size: 18px;
-    }
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 10px;
-        background: rgba(0, 255, 255, 0.2);
-        border: 2px solid cyan;
-        color: cyan;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: 0.3s;
-    }
-    .btn:hover {
-        background: cyan;
-        color: black;
-    }
+  /* ===== NAVBAR sticky + hamburger ===== */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    backdrop-filter:blur(8px);
+    background:linear-gradient(180deg, rgba(5,7,12,.75), rgba(5,7,12,.35));
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:10px 16px;}
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)}
+  .brand img{width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #fff2; box-shadow:0 0 14px #00ffff55}
+  .brand span{font-family:Orbitron, sans-serif; font-weight:700; letter-spacing:1px}
+  .menu{display:flex; gap:14px}
+  .menu a{color:var(--text); text-decoration:none; font-weight:700; padding:8px 10px; border-radius:10px}
+  .menu a:hover{background:#ffffff10; outline:1px solid #00ffff55}
+  .hamb{display:none; flex-direction:column; gap:4px; cursor:pointer}
+  .hamb span{width:26px; height:3px; background:#fff; border-radius:2px}
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        nav ul {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            background: rgba(0,0,0,0.8);
-            position: absolute;
-            top: 50px;
-            left: 0;
-        }
-        nav ul.showing {
-            display: flex;
-        }
-        .menu-toggle {
-            display: flex;
-        }
+  @media (max-width:820px){
+    .hamb{display:flex}
+    .menu{
+      position:absolute; top:58px; right:12px; left:12px;
+      background:rgba(5,7,12,.92); border:1px solid var(--border);
+      border-radius:14px; padding:10px; display:none; flex-direction:column;
     }
+    .menu.show{display:flex}
+    .menu a{text-align:center}
+  }
+
+  /* ===== Sections & hero ===== */
+  main{padding-top:68px}
+  section{max-width:1200px; margin:0 auto; padding:36px 16px}
+  .hero{
+    min-height:78vh; display:grid; place-items:center; text-align:center;
+  }
+  .hero h1{
+    margin:0 0 10px; font-family:Orbitron, sans-serif; font-size:clamp(30px,7vw,68px);
+    background:linear-gradient(270deg,#ff00ff,#00ffff,#ffcc00);
+    background-size:600% 600%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation:gradmove 6s ease infinite, glow 2.2s ease-in-out infinite alternate;
+    text-shadow:0 0 10px #0ff;
+  }
+  @keyframes gradmove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes glow{from{text-shadow:0 0 8px #0ff,0 0 16px #0ff}to{text-shadow:0 0 14px #0ff,0 0 34px #0ff}}
+  .hero p{max-width:820px; margin:0 auto 18px; color:var(--muted); font-size:clamp(14px,2.2vw,18px)}
+  .logo-wrap{display:flex; justify-content:center; margin:16px 0 10px}
+  .logo{
+    width:min(220px, 45vw); aspect-ratio:1/1; border-radius:50%;
+    overflow:hidden; border:4px solid #ffffff99; box-shadow:0 0 20px #ffffff55;
+  }
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .cta{margin-top:10px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .btn{padding:10px 16px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,.06); color:var(--text); text-decoration:none; font-weight:700}
+  .btn:hover{outline:1px solid #00ffff66; box-shadow:0 0 18px #00ffff55}
+
+  .card{background:var(--glass); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:0 12px 26px #0009}
+
+  /* Tentang */
+  .about{display:grid; gap:18px; grid-template-columns:1.2fr .8fr; align-items:center}
+  .about img{width:100%; border-radius:16px; border:1px solid var(--border)}
+  @media (max-width:900px){.about{grid-template-columns:1fr}}
+
+  /* Galeri */
+  .gallery{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .gallery .ph{position:relative; aspect-ratio: 1/1; border-radius:14px; overflow:hidden; border:1px solid var(--border); background:#0a0f18}
+  .gallery .ph img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+
+  /* Event */
+  .card-grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .event{display:flex; gap:12px; align-items:flex-start; padding:12px; border-radius:14px; border:1px solid var(--border); background:#0a0f18aa}
+  .event .thumb{width:84px; height:84px; flex:0 0 84px; border-radius:10px; overflow:hidden; border:1px solid var(--border)}
+  .event .thumb img{width:100%; height:100%; object-fit:cover}
+  .event .info h4{margin:0 0 6px}
+
+  /* Kontak */
+  .contacts{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .contact-card{display:flex; gap:12px; align-items:center; padding:14px; border-radius:14px; border:1px solid var(--border); background:#0a0f18aa; text-decoration:none; color:var(--text)}
+  .contact-card:hover{outline:1px solid #00ffff66; box-shadow:0 0 18px #00ffff55}
+  .contact-card img{width:36px; height:36px}
+
+  /* Footer + ticker */
+  footer{padding:28px 16px 70px; text-align:center; color:#cfd8e3}
+  .ticker{position:fixed; left:0; right:0; bottom:0; height:44px; background:rgba(0,0,0,.6); display:flex; align-items:center; overflow:hidden; border-top:1px solid var(--border)}
+  .ticker-text{white-space:nowrap; display:inline-block; padding-left:100%; font-weight:800; letter-spacing:1px; color:var(--accent); text-shadow:0 0 6px var(--accent); animation:ticker 12s linear infinite}
+  @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+  /* Reveal animasi ringan */
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
+  .reveal.show{opacity:1; transform:translateY(0)}
 </style>
 </head>
 <body>
+  <div class="bg"></div>
+  <div class="stars" id="stars"></div>
 
-<nav>
-    <div class="logo">Otaku Club Creator</div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#home">
+        <!-- GANTI LOGO NAVBAR DI SINI -->
+        <img src="https://i.imgur.com/9b0QKfF.jpg" alt="Logo OCC">
+        <span>Otaku Club Creator</span>
+      </a>
+      <div class="hamb" id="hamb" aria-label="Toggle Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="menu" id="menu">
+        <a href="#home">Home</a>
+        <a href="#about">Tentang</a>
+        <a href="#gallery">Galeri</a>
+        <a href="#events">Event</a>
+        <a href="#contact">Kontak</a>
+      </div>
     </div>
-    <ul id="menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Tentang</a></li>
-        <li><a href="#">Galeri</a></li>
-        <li><a href="#">Event</a></li>
-        <li><a href="#">Kontak</a></li>
-    </ul>
-</nav>
+  </nav>
 
-<div class="hero">
-    <h1>Otaku Club Creator</h1>
-    <p>Komunitas kreator pecinta anime dan budaya Jepang. Kami bikin karya, kolaborasi, dan kegiatan seru bareng! Gabung dan hidupkan kreativitasmu bersama OCC.</p>
-    <a href="#" class="btn">Lihat Event</a>
-    <a href="#" class="btn">Gabung Komunitas</a>
-</div>
+  <main>
+    <!-- ===== HOME ===== -->
+    <section id="home" class="hero reveal">
+      <div>
+        <h1>Otaku Club Creator</h1>
+        <div class="logo-wrap">
+          <!-- GANTI FOTO LOGO/HOME DI SINI -->
+          <div class="logo">
+            <img src="https://i.ibb.co/Y8tNkkG/contoh.jpg" alt="Logo OCC">
+          </div>
+        </div>
+        <p>Komunitas kreator pecinta anime & budaya Jepang — bikin karya, kolaborasi, dan kegiatan seru bareng! Yuk gabung dan hidupkan kreativitasmu ✨</p>
+        <div class="cta">
+          <a class="btn" href="#events">Lihat Event</a>
+          <a class="btn" href="#contact">Gabung Komunitas</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TENTANG ===== -->
+    <section id="about" class="reveal">
+      <div class="about card">
+        <div>
+          <h3>Tentang Kami</h3>
+          <p class="muted">OCC adalah ruang berkarya bagi kreator: ilustrator, editor video, cosplayer, penulis, dan semua yang tertarik budaya Jepang. Kami rutin mengadakan diskusi, workshop, serta kolaborasi project.</p>
+          <ul class="muted">
+            <li>Meet-up & sharing session bulanan</li>
+            <li>Project kolaborasi (fanart, AMV, sketsa, komik mini)</li>
+            <li>Open commission & showcase anggota</li>
+          </ul>
+        </div>
+        <!-- GANTI FOTO TENTANG -->
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop" alt="Kegiatan OCC">
+      </div>
+    </section>
+
+    <!-- ===== GALERI ===== -->
+    <section id="gallery" class="reveal">
+      <h3>Galeri</h3>
+      <div class="gallery">
+        <!-- GANTI FOTO GALERI -->
+        <div class="ph"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1520975922313-29800b44e8c4?q=80&w=800&auto=format&fit=crop" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=800&auto=format&fit=crop" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop" alt=""></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1517511620798-cec17d428bc0?q=80&w=800&auto=format&fit=crop" alt=""></div>
+      </div>
+    </section>
+
+    <!-- ===== EVENTS ===== -->
+    <section id="events" class="reveal">
+      <h3>Event & Kegiatan</h3>
+      <div class="card-grid">
+        <div class="event">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=600&auto=format&fit=crop" alt=""></div>
+          <div class="info">
+            <h4>Meetup Bulanan: Kreator Talk</h4>
+            <p class="muted">Sharing proses kreatif & showcase karya. Café Kuro, 24 Aug, 15.00 WIB.</p>
+          </div>
+        </div>
+        <div class="event">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop" alt=""></div>
+          <div class="info">
+            <h4>Workshop AMV & Editing</h4>
+            <p class="muted">Belajar workflow AMV dari nol sampai publish. 7 Sep (kuota terbatas).</p>
+          </div>
+        </div>
+        <div class="event">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=600&auto=format&fit=crop" alt=""></div>
+          <div class="info">
+            <h4>Cosplay Mini-Project</h4>
+            <p class="muted">Pemotretan bertema sci-fi bareng tim OCC. 21 Sep.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== KONTAK ===== -->
+    <section id="contact" class="reveal">
+      <h3>Kontak & Sosial</h3>
+      <div class="contacts">
+        <!-- WHATSAPP -->
+        <a class="contact-card" href="https://wa.me/6281234567890?text=Halo%20OCC!%20Saya%20ingin%20bergabung" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WA">
+          <div>
+            <strong>WhatsApp</strong>
+            <div class="muted">Chat admin OCC</div>
+          </div>
+        </a>
+        <!-- TIKTOK -->
+        <a class="contact-card" href="https://www.tiktok.com/@your_account" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok">
+          <div>
+            <strong>TikTok</strong>
+            <div class="muted">Ikuti konten terbaru kami</div>
+          </div>
+        </a>
+        <!-- MEDIAFIRE -->
+        <a class="contact-card" href="https://www.mediafire.com/folder/your_folder" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mediafire.svg" alt="MediaFire">
+          <div>
+            <strong>MediaFire</strong>
+            <div class="muted">Download materi/asset OCC</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> Otaku Club Creator • All rights reserved</footer>
+
+  <!-- News Ticker bawah -->
+  <div class="ticker"><div class="ticker-text">OTAKU CLUB CREATOR • CREATE • COLLABORATE • CELEBRATE • O.C.C •</div></div>
 
 <script>
-function toggleMenu() {
-    document.getElementById('menu').classList.toggle('showing');
-}
-</script>
+  // Tahun otomatis
+  document.getElementById('year').textContent = new Date().getFullYear();
 
+  // Hamburger
+  const hamb = document.getElementById('hamb');
+  const menu = document.getElementById('menu');
+  hamb.addEventListener('click', () => {
+    const show = menu.classList.toggle('show');
+    hamb.setAttribute('aria-expanded', show ? 'true' : 'false');
+  });
+
+  // Stars (20 titik, kedip pelan) -> ringan
+  (function makeStars(){
+    const wrap = document.getElementById('stars');
+    const count = 20;
+    for(let i=0;i<count;i++){
+      const s = document.createElement('div');
+      s.className='star';
+      s.style.left = Math.random()*100 + '%';
+      s.style.top  = Math.random()*100 + '%';
+      s.style.animationDuration = (2.5 + Math.random()*3.5) + 's';
+      s.style.opacity = (0.2 + Math.random()*0.6).toFixed(2);
+      s.style.transform = scale(${0.8 + Math.random()*1.6});
+      wrap.appendChild(s);
+    }
+  })();
+
+  // Reveal on scroll (ringan)
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('show'); }
+    });
+  }, {threshold: .12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
