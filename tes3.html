@@ -1,131 +1,148 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Otaku Club Creator</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otaku Club Creator</title>
+<style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: white;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_1280.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        text-align: center;
     }
 
     /* Navbar */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      z-index: 1000;
+        position: sticky;
+        top: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        z-index: 1000;
     }
-
-    nav h1 {
-      font-size: 18px;
-      color: cyan;
-      margin: 0;
+    nav .logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: cyan;
+        text-shadow: 0 0 10px cyan;
     }
-
     nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
     }
-
     nav ul li {
-      margin-left: 20px;
+        margin: 0 15px;
     }
-
     nav ul li a {
-      color: white;
-      text-decoration: none;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
     }
 
-    /* Hamburger Button */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
+    /* Hamburger */
+    .menu-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+    }
+    .menu-toggle div {
+        width: 25px;
+        height: 3px;
+        background: white;
+        margin: 4px 0;
     }
 
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background: white;
-      margin: 4px 0;
+    /* Hero */
+    .hero {
+        padding: 100px 20px;
+    }
+    .hero h1 {
+        font-size: 50px;
+        text-shadow: 0 0 20px cyan, 0 0 40px cyan;
+        animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+        from { text-shadow: 0 0 20px cyan, 0 0 40px cyan; }
+        to { text-shadow: 0 0 30px lime, 0 0 60px lime; }
+    }
+    .hero p {
+        max-width: 600px;
+        margin: 20px auto;
+        font-size: 18px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        background: rgba(0, 255, 255, 0.2);
+        border: 2px solid cyan;
+        color: cyan;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        background: cyan;
+        color: black;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-      nav ul {
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background: rgba(0,0,0,0.9);
-        flex-direction: column;
-        width: 200px;
-        display: none;
-      }
-      nav ul li {
-        margin: 10px 0;
-      }
-      .hamburger {
-        display: flex;
-      }
-      nav ul.show {
-        display: flex;
-      }
+        nav ul {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background: rgba(0,0,0,0.8);
+            position: absolute;
+            top: 50px;
+            left: 0;
+        }
+        nav ul.showing {
+            display: flex;
+        }
+        .menu-toggle {
+            display: flex;
+        }
     }
-  </style>
+</style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav>
-    <h1>Otaku Club Creator</h1>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
+<nav>
+    <div class="logo">Otaku Club Creator</div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
     <ul id="menu">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#tentang">Tentang</a></li>
-      <li><a href="#galeri">Galeri</a></li>
-      <li><a href="#event">Event</a></li>
-      <li><a href="#kontak">Kontak</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Tentang</a></li>
+        <li><a href="#">Galeri</a></li>
+        <li><a href="#">Event</a></li>
+        <li><a href="#">Kontak</a></li>
     </ul>
-  </nav>
+</nav>
 
-  <!-- Konten -->
-  <section id="home" style="padding-top:80px;height:100vh;background:linear-gradient(#000,#111);">
-    <h2>Home</h2>
-  </section>
-  <section id="tentang" style="height:100vh;background:#222;">
-    <h2>Tentang Kami</h2>
-  </section>
-  <section id="galeri" style="height:100vh;background:#333;">
-    <h2>Galeri</h2>
-  </section>
-  <section id="event" style="height:100vh;background:#444;">
-    <h2>Event</h2>
-  </section>
-  <section id="kontak" style="height:100vh;background:#555;">
-    <h2>Kontak</h2>
-  </section>
+<div class="hero">
+    <h1>Otaku Club Creator</h1>
+    <p>Komunitas kreator pecinta anime dan budaya Jepang. Kami bikin karya, kolaborasi, dan kegiatan seru bareng! Gabung dan hidupkan kreativitasmu bersama OCC.</p>
+    <a href="#" class="btn">Lihat Event</a>
+    <a href="#" class="btn">Gabung Komunitas</a>
+</div>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("show");
-    }
-  </script>
+<script>
+function toggleMenu() {
+    document.getElementById('menu').classList.toggle('showing');
+}
+</script>
 
 </body>
 </html>
